@@ -4,14 +4,7 @@ import pandas as pd
 from sklearn.model_selection import GroupShuffleSplit, train_test_split
 
 
-def random_split(
-    df: pd.DataFrame,
-    *,
-    target: str,
-    test_size: float,
-    seed: int,
-    stratify: bool,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+def random_split(df: pd.DataFrame, *, target: str, test_size: float, seed: int, stratify: bool):
     y = df[target]
     strat = y if stratify else None
     train, test = train_test_split(df, test_size=test_size, random_state=seed, stratify=strat)

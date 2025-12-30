@@ -15,9 +15,7 @@ class InputSchema:
     forbidden_columns: list[str] = field(default_factory=list)
 
     @staticmethod
-    def from_training_df(
-        df: pd.DataFrame, *, target: str, id_cols: list[str]
-    ) -> "InputSchema":
+    def from_training_df(df: pd.DataFrame, *, target: str, id_cols: list[str]) -> "InputSchema":
         optional_ids = [c for c in id_cols if c in df.columns]
         feature_cols = [c for c in df.columns if c not in set([target] + optional_ids)]
         feature_dtypes = {c: str(df[c].dtype) for c in feature_cols}
@@ -55,7 +53,9 @@ class InputSchema:
         )
 
 
-def validate_and_align(df_in: pd.DataFrame, schema: InputSchema) -> tuple[pd.DataFrame, pd.DataFrame]:
+def validate_and_align(
+    df_in: pd.DataFrame, schema: InputSchema
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     forbidden = [c for c in schema.forbidden_columns if c in df_in.columns]
     assert not forbidden, f"Forbidden columns present in inference input: {forbidden}"
 
