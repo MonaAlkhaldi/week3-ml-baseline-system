@@ -87,8 +87,10 @@ def run_train(cfg: TrainConfig, *, root: Path | None = None) -> Path:
     assert cfg.target in df.columns, f"Missing target column: {cfg.target}"
     df = df.dropna(subset=[cfg.target]).reset_index(drop=True)
 
+    # detect id columns present in the data
     id_cols_present = [c for c in cfg.id_cols if c in df.columns]
 
+    # sanity check: ids should be unique when present (helps joins/debugging)
     if id_cols_present:
         dup = df.duplicated(subset=id_cols_present, keep=False)
         assert not dup.any(), f"Duplicate rows for id_cols={id_cols_present} (n={int(dup.sum())})"
@@ -121,6 +123,7 @@ def run_train(cfg: TrainConfig, *, root: Path | None = None) -> Path:
     # ------------------------------------------------------------------
     # X / y
     # ------------------------------------------------------------------
+    # IMPORTANT: ids excluded from training features, but included later in output tables
     drop_cols = [cfg.target, *id_cols_present]
 
     X_train = train_df.drop(columns=drop_cols, errors="ignore")
@@ -176,7 +179,9 @@ def run_train(cfg: TrainConfig, *, root: Path | None = None) -> Path:
 
     ext = best_effort_ext()
 
-    # Save holdout input
+    # ------------------------------------------------------------------
+    # Save holdout input table (features, plus ids if present)
+    # ------------------------------------------------------------------
     holdout_input = X_test.copy()
     if id_cols_present:
         holdout_input = pd.concat(
@@ -210,6 +215,7 @@ def run_train(cfg: TrainConfig, *, root: Path | None = None) -> Path:
             lambda a, b: float(roc_auc_score(a, b)),
         )
 
+        # ✅ TASK 3 pattern (classification)
         preds = pd.DataFrame(
             {
                 "score": y_score,
@@ -228,21 +234,30 @@ def run_train(cfg: TrainConfig, *, root: Path | None = None) -> Path:
             lambda a, b: float(mean_absolute_error(a, b)),
         )
 
+        # ✅ TASK 3 pattern (regression)
         preds = pd.DataFrame({"prediction": y_pred})
 
+    # ✅ Hint — don’t forget IDs
+    # IDs included in output tables (for joining back), excluded from training features (done above)
     if id_cols_present:
         preds = pd.concat(
-            [test_df[id_cols_present].reset_index(drop=True), preds],
+            [
+                test_df[id_cols_present].reset_index(drop=True),
+                preds.reset_index(drop=True),
+            ],
             axis=1,
         )
 
+    # ✅ include the true target column (evaluation/debugging)
     preds[cfg.target] = y_true
 
+    # save metrics
     (run_dir / "metrics" / "holdout_metrics.json").write_text(
         json.dumps(metrics, indent=2) + "\n",
         encoding="utf-8",
     )
 
+    # ✅ TASK 3: write tables/holdout_predictions.<csv|parquet>
     holdout_preds_path = run_dir / "tables" / f"holdout_predictions{ext}"
     write_tabular(preds, holdout_preds_path)
 
