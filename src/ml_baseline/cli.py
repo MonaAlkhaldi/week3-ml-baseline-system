@@ -78,12 +78,18 @@ def predict(
 
 
 @app.command("show-run")
-def show_run(run: str = "latest") -> None:
-    """Print run_meta.json for a saved run."""
+def show_run(
+    run: str = typer.Argument("latest", help="Run directory or 'latest'"),
+) -> None:
     paths = Paths.from_repo_root()
     run_dir = resolve_run_dir(run, models_dir=paths.models_dir)
+
     meta_path = run_dir / "run_meta.json"
+    if not meta_path.exists():
+        raise FileNotFoundError(f"run_meta.json not found at: {meta_path}")
+
     typer.echo(meta_path.read_text(encoding="utf-8"))
+
 
 
 if __name__ == "__main__":
