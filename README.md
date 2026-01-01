@@ -28,7 +28,9 @@ uv run ml-baseline predict --run latest --input data/processed/features.csv --ou
 
 **SOLUTION**  
 First, run this :)  
-python -c "import pandas as pd; df=pd.read_csv('data/processed/features.csv'); df.drop(columns=['is_high_value']).to_csv('data/processed/features_infer.csv', index=False); print('Created data/processed/features_infer.csv')"
+```bash
+python -c "import pandas as pd; df = pd.read_csv('data/processed/features.csv'); df.drop(columns=['is_high_value']).to_csv('data/processed/features_infer.csv', index=False); print('Created data/processed/features_infer.csv')"
+```
 
 Then run this:  
 uv run ml-baseline predict --run latest --input data/processed/features_infer.csv --output outputs/preds.csv  
