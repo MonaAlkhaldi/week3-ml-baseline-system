@@ -23,8 +23,8 @@ uv venv .venv
 ```uv run ml-baseline train --target is_high_value```  
 
 **Heads up:**  
-In this run, you will face an assertion about the target. Do not assume that the code is wrong — I have the solution:
-```uv run ml-baseline predict --run latest --input data/processed/features.csv --output outputs/preds.csv  ```
+In this run ```uv run ml-baseline predict --run latest --input data/processed/features.csv --output outputs/preds.csv  ```, you will face an assertion about the target. Do not assume that the code is wrong — I have the solution:
+
 
 **SOLUTION**  
 First, run this :)  
