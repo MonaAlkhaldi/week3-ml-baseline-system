@@ -49,4 +49,4 @@ uv run ml-baseline predict --run latest --input data/processed/features_infer.cs
 
 ------
 ## Collab Assigemnt : 
-https://colab.research.google.com/drive/14pa9RNxukMnFPhn5fI1qO7Z0UnBzT_aD#scrollTo=K5zV_69cV4nc  
+https://colab.research.google.com/drive/14pa9RNxukMnFPhn5fI1qO7Z0UnBzT_aD#scrollTo=K5zV_69cV4nc
