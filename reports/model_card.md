@@ -1,25 +1,37 @@
 # Model Card — Week 3 Baseline
 
 ## Problem
-- Predict: is_high_value for one row per user
-- Decision enabled: identify high-value users for retention offers or targeted campaigns
-- Constraints: CPU-only; offline-first; batch inference
+- Target: is_high_value (binary classification: 1 = high-value user, 0 = not high-value)
+- Unit of analysis: Individual user (one row per user)
+- Decision enabled: Identify high-value users for prioritization, targeting, or intervention
 
-## Data (contract)
+## Data
 - Feature table: data/processed/features.csv
-- Unit of analysis: one row per user
-- Target column: is_high_value, positive class: 1 (high-value user)
-- Optional IDs (passthrough): user_id
+- Dataset hash (sha256): <COPY FROM run_meta.json → dataset_hash>
 
-## Splits (draft for now)
-- Holdout strategy: random stratified split (default)
-- Leakage risks: using post-outcome information such as future orders or revenue-derived features beyond the prediction point
+## Splits
+- Holdout strategy: Random stratified split
+- Test size: 0.2
+- Random seed: 42
 
-## Metrics (draft for now)
-- Primary: ROC AUC (captures ranking quality and is robust to class imbalance)
-- Baseline: dummy classifier (most_frequent) must be reported
+## Metrics (holdout)
+- Baseline (DummyClassifier, most_frequent):
+  - Accuracy: <COPY baseline_accuracy FROM holdout_metrics.json>
+- Model (Logistic Regression):
+  - Accuracy: <COPY model_accuracy FROM holdout_metrics.json>
+  - ROC AUC: <COPY roc_auc IF PRESENT, otherwise note "undefined due to single-class split">
 
-## Shipping
-- Artifacts: trained model, input schema, evaluation metrics, holdout input and predictions tables, run metadata
-- Known limitations: baseline model is simple and may underfit; performance may be unstable due to small dataset size
-- Monitoring sketch: track prediction distribution, class balance drift, ROC AUC over time, and missing or unexpected feature values
+## Limitations
+- Dataset is synthetic and small, limiting generalization to real-world data
+- Class imbalance may affect metric stability, especially ROC AUC
+- Features are limited and do not capture temporal or behavioral dynamics
+
+## Monitoring sketch
+- Track prediction class distribution over time
+- Monitor accuracy and ROC AUC on fresh labeled data
+- Alert if input schema or feature distributions drift
+
+## Reproducibility
+- Run id: <RUN_ID>
+- Git commit: <COPY git_commit FROM run_meta.json>
+- Environment snapshot: models/runs/<RUN_ID>/env/pip_freeze.txt

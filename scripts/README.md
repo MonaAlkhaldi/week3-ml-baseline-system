@@ -1,5 +1,13 @@
-# scripts/
+# Week 3 — ML Baseline System
 
-Use this folder only for **thin** helpers that call into `src/<package>/...`.
+This repository implements a minimal, reproducible machine learning baseline system using a CLI-first workflow.  
+It covers data generation, model training, inference, evaluation, and reporting.
 
-Prefer the main Typer CLI in `src/<package>/cli.py` for anything students are expected to run.
+---
+
+## Setup
+
+### 1. Create and activate virtual environment
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
