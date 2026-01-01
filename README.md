@@ -9,22 +9,22 @@ It covers data generation, model training, inference, evaluation, and reporting.
 NOTE: Make sure you are in the `week3-ml-baseline-system` folder 
 
 ### 1. Create and activate virtual environment
+```
 uv venv .venv  
 .venv\Scripts\activate
-
+```
 ### Start running
-uv sync -----> Note: **This installs the exact dependency versions defined for the project**  
-uv run ml-baseline --help -----> Note: **Shows all available commands and options**  
-uv run pytest ------> Note: **This runs all automated tests using pytest**
+```uv sync``` -----> Note: **This installs the exact dependency versions defined for the project**  
+```uv run ml-baseline --help``` -----> Note: **Shows all available commands and options**  
+```uv run pytest``` ------> Note: **This runs all automated tests using pytest**
 
 ### Sanity commands
-uv run ml-baseline make-sample-data  
-uv run ml-baseline train --target is_high_value  
+``` uv run ml-baseline make-sample-data```  
+```uv run ml-baseline train --target is_high_value```  
 
 **Heads up:**  
 In this run, you will face an assertion about the target. Do not assume that the code is wrong — I have the solution:
-
-uv run ml-baseline predict --run latest --input data/processed/features.csv --output outputs/preds.csv  
+```uv run ml-baseline predict --run latest --input data/processed/features.csv --output outputs/preds.csv  ```
 
 **SOLUTION**  
 First, run this :)  
