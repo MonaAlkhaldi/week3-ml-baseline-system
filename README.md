@@ -43,5 +43,6 @@ uv run ml-baseline predict --run latest --input data/processed/features_infer.cs
 - Therefore, predictions are run using `data/processed/features_infer.csv`, which is identical to the training features **minus the target column**.
 
 **Now we can move forward**
-uv run pytest 
+
+```uv run pytest ``` 
   
