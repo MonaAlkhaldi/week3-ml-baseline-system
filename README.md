@@ -45,4 +45,9 @@ uv run ml-baseline predict --run latest --input data/processed/features_infer.cs
 **Now we can move forward**
 
 ```uv run pytest ``` 
+
+
+------
+## Collab Assigemnt : 
+https://colab.research.google.com/drive/14pa9RNxukMnFPhn5fI1qO7Z0UnBzT_aD#scrollTo=l3U_R1yfHn9z
   
