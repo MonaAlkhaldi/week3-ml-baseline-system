@@ -21,13 +21,16 @@ uv run pytest ------> Note: **This runs all automated tests using pytest**
 uv run ml-baseline make-sample-data  
 uv run ml-baseline train --target is_high_value  
 
-**CAUTION**  
-In this run, you will face an assertion about the target. Do not panic—this is only to show that the assertion works (I hope :))  :
+**Heads up:**  
+In this run, you will face an assertion about the target. Do not assume that the code is wrong — I have the solution:
 
 uv run ml-baseline predict --run latest --input data/processed/features.csv --output outputs/preds.csv  
 
 **SOLUTION**  
-Run this instead:  
+First, run this :)  
+python -c "import pandas as pd; df=pd.read_csv('data/processed/features.csv'); df.drop(columns=['is_high_value']).to_csv('data/processed/features_infer.csv', index=False); print('Created data/processed/features_infer.csv')"
+
+Then run this:  
 uv run ml-baseline predict --run latest --input data/processed/features_infer.csv --output outputs/preds.csv  
 
 **If you are wondering why this error happened**  
@@ -35,12 +38,6 @@ uv run ml-baseline predict --run latest --input data/processed/features_infer.cs
 - For inference, the system enforces schema validation and **rejects inputs containing the target** to prevent data leakage.
 - Therefore, predictions are run using `data/processed/features_infer.csv`, which is identical to the training features **minus the target column**.
 
-
+**Now we can move forward**
 uv run pytest 
-
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-### Colab Notebook
-https://colab.research.google.com/drive/14pa9RNxukMnFPhn5fI1qO7Z0UnBzT_aD
   
